@@ -1,0 +1,28 @@
+#maincanvas {
+	width: 100%;
+	height: 100%;
+}
+
+#title {
+	width: 100%;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	font-family: 'Helvetica';
+	color: white;
+}
+
+#content {
+	display: flex;
+	flex-flow: column;
+	width: 75%;
+	height: 75%;
+	left: 12.5%;
+	top: 12.5%;
+	position: fixed;
+	background-color: #666666;
+	text-align: center;
+}
+
+body {
+	background-color: #888888;
+}
