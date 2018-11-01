@@ -1,15 +1,29 @@
 
 var canvas, ctx, handler, player, spawner, score, canJump;
 
+const easyMode = true;
+
 var ais = [];
 var aiScores = [];
 var generation = 0;
 var aiHighScore = 0;
 var frameCounter = 0;
+var paused = false;
 
 const noOfAI = 500;
 const noOfAISeen = 25;
-const speed = 1;
+const speed = 4;
+
+function pause() {
+	if (paused == false) {
+		paused = true;
+		return 'Paused!';
+	} else {
+		paused = false;
+		requestAnimationFrame(gameLoop);
+		return 'Resumed!';
+	}
+}
 
 var StateHandler = function() {
 	this.state = 'menu';
@@ -31,8 +45,10 @@ var StateHandler = function() {
 	}
 
 	this.animate = function() {
+
 		ctx.fillStyle = '#66AAFF';
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
+
 		if (this.state == 'menu') {
 			menu();
 		} else if (this.state == 'game') {
@@ -177,8 +193,10 @@ function endgame() {
 }
 
 function gameLoop() {
-	handler.animate();
-	requestAnimationFrame(gameLoop);
+	if (paused == false) {
+		handler.animate();
+		requestAnimationFrame(gameLoop);
+	}
 }
 
 document.onload = setup();

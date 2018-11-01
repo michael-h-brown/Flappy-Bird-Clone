@@ -1,11 +1,19 @@
 
-const wallDistance = 50;
+var wallDistance = 50;
+const bigWallGaps = 75;
 const wallColor = '#009900';
 const wallSpeed = 1;
 
-const timeBtwnWalls = 100;
+var timeBtwnWalls = 100;
+const moreWallSpacing = 150;
 
 var WallSpawner = function() {
+
+	if (easyMode) {
+		wallDistance = bigWallGaps;
+		timeBtwnWalls = moreWallSpacing;
+	}
+
 	this.walls = [];
 	this.timer = 0;
 

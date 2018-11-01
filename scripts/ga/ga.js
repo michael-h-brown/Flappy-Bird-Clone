@@ -1,7 +1,16 @@
 
-const mutationRate = 0.1;
+var mutationRate = 0.3;
+const highMutation = 0.5;
+
+var goodAIs = [];
+var goodAIFitnessScores = [];
+var goodAIFitnesses = [];
 
 function nextGen() {
+
+	if (easyMode) {
+		mutationRate = highMutation;
+	}
 
 	calculateFitness();
 
@@ -43,23 +52,43 @@ function pickAI() {
 	var r = Math.random();
 
 	while (r > 0) {
-		r = r - ais[index].fitness;
+		r = r - goodAIFitnesses[index];
 		index++;
 	}
 	index--;
 
-	var child = ais[index].brain.copy();
+	var child = goodAIs[index].brain.copy();
 	child.mutate(mutate);
 	return child;
 }
 
 function calculateFitness() {
+
+	var noGoodAIs = goodAIs.length == 0;
+
+	for (var i = 0; i < noOfAI; i+=1) {
+		if (noGoodAIs) {
+			goodAIs.push(new Player(true, ais[i].brain.copy()));
+			goodAIFitnessScores.push(ais[i].fitnessScore);
+			goodAIFitnesses.push(0);
+		} else {
+			for (var j = 0; j < noOfAI; j+=1) {
+				if (ais[i].fitnessScore > goodAIFitnesses[j]) {
+					goodAIs[j] = new Player(true, ais[i].brain.copy());
+					goodAIFitnessScores[j] = ais[i].fitnessScore;
+					goodAIFitnesses[j] = 0;
+					break;
+				}
+			}
+		}
+	}
+
 	var sum = 0;
 	for (var i = 0; i < noOfAI; i+= 1) {
-		sum += ais[i].fitnessScore;
+		sum += goodAIFitnessScores[i];
 	}
 
 	for (var i = 0; i < noOfAI; i+= 1) {
-		ais[i].fitness = ais[i].fitnessScore / sum;
+		goodAIFitnesses[i] = goodAIFitnessScores[i] / sum;
 	}
 }

@@ -1,10 +1,16 @@
-const gravity = 0.2;
+var gravity = 0.2;
+const lowGravity = 0.05;
 const terminalVel = 3;
 const playerSize = 5;
-const jumpVel = -3;
+var jumpVel = -3;
+const lowGravityJump = -1.5;
 const activationLevel = 0.5;
 
 var Player = function(isAI, brain) {
+	if (easyMode && gravity != lowGravity) {
+		gravity = lowGravity;
+		jumpVel = lowGravityJump;
+	}
 	this.x = canvas.width * 0.2;
 	this.y = canvas.height / 2;
 	this.velocityY = 0;
@@ -29,7 +35,9 @@ var Player = function(isAI, brain) {
 
 	this.checkDead = function() {
 		if (this.y + playerSize > canvas.height || this.y - playerSize < 0) {
-			this.dead = true;
+			if (!easyMode) {
+				this.dead = true;
+			}
 			return true;
 		} else {
 			return false;
@@ -41,7 +49,7 @@ var Player = function(isAI, brain) {
 	}
 
 	this.think = function(nextWall) {
-		var inputs = [(this.y / canvas.height), (nextWall[0] / canvas.width), (nextWall[1] / canvas.height), (nextWall[2] / canvas.height), (this.velocityY / terminalVel)];
+		var inputs = [(this.y / canvas.height), (nextWall[0] / canvas.width), (nextWall[1] / canvas.height), (nextWall[2] / canvas.height), ((this.velocityY / 2) + (terminalVel / 2) / terminalVel)];
 		var output = this.brain.predict(inputs);
 
 		if (output[0] > activationLevel) {
@@ -59,6 +67,13 @@ var Player = function(isAI, brain) {
 				this.velocityY = -terminalVel;
 			}
 			this.y = this.y += this.velocityY;
+			if (easyMode) {
+				if (this.y - playerSize < 0) {
+					this.y = 0 + playerSize;
+				} else if (this.y + playerSize > canvas.height) {
+					this.y = canvas.height - playerSize;
+				}
+			}
 		}
 	}
 
