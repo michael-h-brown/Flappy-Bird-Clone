@@ -16,9 +16,24 @@ var WallSpawner = function() {
 			this.walls.push(new Wall(wallDistance, wallColor, wallSpeed, canvas.width));
 		}
 
-		this.walls.forEach(function (wall) {
-			wall.update();
-		});
+		for (var i = this.walls.length-1; i >= 0; i-=1) {
+			this.walls[i].update();
+			if (this.walls[i].destroy) {
+				this.walls.splice(i, 1);
+			}
+		}
+	};
+
+	this.nextWall = function() {
+		var thisWall;
+		for (var i = 0; i < this.walls.length; i+=1) {
+			if (this.walls[i].passedThrough == false) {
+				thisWall = [this.walls[i].x, this.walls[i].topY, this.walls[i].bottomY];
+				break;
+			}
+		}
+
+		return thisWall;
 	};
 
 	this.checkCollisions = function(playerX, playerY, playerRadius) {
@@ -63,9 +78,13 @@ var Wall = function(distance, color, speed, x) {
 	this.topY = Math.random() * (canvas.height - distance);
 	this.bottomY = this.topY + distance;
 	this.passedThrough = false;
+	this.destroy = false;
 
 	this.update = function() {
 		this.x -= this.speed;
+		if (this.x <= 0) {
+			this.destroy = true;
+		}
 	};
 
 	this.draw = function() {
