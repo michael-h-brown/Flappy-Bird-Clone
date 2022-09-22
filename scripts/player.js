@@ -4,7 +4,7 @@ const terminalVel = 3;
 const playerSize = 5;
 var jumpVel = -3;
 const lowGravityJump = -1.5;
-const activationLevel = 0.5;
+const activationLevel = 0.7;
 
 var Player = function(isAI, brain) {
 	if (easyMode && gravity != lowGravity) {
@@ -23,7 +23,7 @@ var Player = function(isAI, brain) {
 	if (isAI) {
 		this.colour = '#FF000044';
 		if (brain == null) {
-			this.brain = new NeuralNetwork(5, 5, 1);
+			this.brain = new NeuralNetwork(5, 7, 1);
 		} else {
 			this.brain = brain;
 		}
