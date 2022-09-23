@@ -1,2 +1,2 @@
 # Flappy-Bird-Clone
-![See it running](./index.html)
+![See it running](https://michael-h-brown.github.io/Flappy-Bird-Clone/)
